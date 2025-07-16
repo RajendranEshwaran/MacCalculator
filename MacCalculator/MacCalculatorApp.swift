@@ -2,7 +2,7 @@
 //  MacCalculatorApp.swift
 //  MacCalculator
 //
-//  Created by RajayGoms on 7/16/25.
+//  Created by Rajendran Eshwaran on 7/16/25.
 //
 
 import SwiftUI

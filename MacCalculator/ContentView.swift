@@ -2,23 +2,37 @@
 //  ContentView.swift
 //  MacCalculator
 //
-//  Created by RajayGoms on 7/16/25.
+//  Created by Rajendran Eshwaran on 7/16/25.
 //
 
 import SwiftUI
 
 struct ContentView: View {
     var body: some View {
-        VStack {
-            Image(systemName: "globe")
-                .imageScale(.large)
-                .foregroundStyle(.tint)
-            Text("Hello, world!")
+        ZStack {
+            Color.black.edgesIgnoringSafeArea(.all)
+            VStack {
+                CalculatorDisplayView()
+                    .padding(.top, 50)
+                Spacer()
+                BasicCalculatorView()
+            }.edgesIgnoringSafeArea(.all)
         }
-        .padding()
     }
 }
 
 #Preview {
     ContentView()
+}
+
+struct CalculatorDisplayView: View {
+    var body: some View {
+        VStack {
+            Text("000000")
+                .font(.system(size: 50, weight: .light))
+                .foregroundColor(.white)
+                .padding(.leading)
+                .frame(maxWidth: .infinity, maxHeight: 200, alignment: .trailing)
+        }.background(Color.gray)
+    }
 }
