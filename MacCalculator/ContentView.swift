@@ -12,10 +12,8 @@ struct ContentView: View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
             VStack {
-                CalculatorDisplayView()
-                    .padding(.top, 50)
-                Spacer()
                 BasicCalculatorView()
+               // CalculatorTypeView()
             }.edgesIgnoringSafeArea(.all)
         }
     }
@@ -26,13 +24,26 @@ struct ContentView: View {
 }
 
 struct CalculatorDisplayView: View {
+    @Binding var displayValue: String
     var body: some View {
         VStack {
-            Text("000000")
+            Text(displayValue)
                 .font(.system(size: 50, weight: .light))
                 .foregroundColor(.white)
                 .padding(.leading)
                 .frame(maxWidth: .infinity, maxHeight: 200, alignment: .trailing)
-        }.background(Color.gray)
+        }.background(Color.black)
+    }
+}
+
+struct CalculatorTypeView: View {
+    var body: some View {
+        List(CalculatorTypes.allCases, id: \.self) { types in
+            VStack {
+                Text("\(types)")
+            }
+        }.frame(width: 200, height: 220)
+            .scrollDisabled(true)
+            .scrollIndicators(.hidden)
     }
 }

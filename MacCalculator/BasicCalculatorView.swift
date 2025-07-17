@@ -8,23 +8,36 @@
 import SwiftUI
 
 struct BasicCalculatorView: View {
+    @State private var displayValue: String = "0"
+    @State private var types: Bool = false
     var body: some View {
-        VStack {
-            Spacer()
-            CalculatorKeyboardView(row: 5, columns: 4, calculatorButtonTitles: basicCalculatorButtonTitles) { x,y  in
-                VStack {
-                    Button(action: { }) {
-                        let test = basicCalculatorButtonTitles[x][y]
-                        Text("\(test)")
-                            .font(.system(size: 25, weight: .bold))
-                            .foregroundStyle(.white)
-                            .frame(width: 80, height: 80)
-                            .background(buttonColor(button: test))
-                    }.clipShape(.circle)
-                    
+        ZStack {
+            VStack {
+                CalculatorDisplayView(displayValue: $displayValue)
+                    .padding(.top, 50)
+                Spacer()
+                CalculatorKeyboardView(row: 5, columns: 4, calculatorButtonTitles: basicCalculatorButtonTitles) { x,y  in
+                    VStack {
+                        Button(action: {
+                            let buttons = basicCalculatorButtonTitles[x][y]
+                            if buttons == "TY" {
+                                types.toggle()
+                            } else {
+                                let result = buttonOperationTapped(basicCalculatorButtonTitles[x][y], displayValue: &displayValue)
+                                displayValue = String(result.1)
+                            }
+                        }) {
+                            let buttons = basicCalculatorButtonTitles[x][y]
+                            Text("\(buttons)")
+                                .font(.system(size: 25, weight: .bold))
+                                .foregroundStyle(buttonTextColor(button: buttons))
+                                .frame(width: 80, height: 80)
+                                .background(buttonColor(button: buttons))
+                        }.clipShape(.circle)
+                    }
                 }
+                Spacer()
             }
-            Spacer()
         }
     }
 }

@@ -36,14 +36,14 @@ let basicCalculatorButtonTitles: [[String]] = [
 ["7", "8", "9", "x"],
 ["4", "5", "6", "-"],
 ["1", "2", "3", "+"],
-["TY􀇳", "0", ".", "="]]
+["TY", "0", ".", "="]]
 
 let scientificCalculatorButtonTitles: [[String]] = [
     ["(", ")", "mc", "m+", "m-", "mr", "⌫", "⁺∕₋", "%", "÷"],
     ["2nd", "x²", "x³", "x^y", "e^x", "10^x", "7", "8", "9", "x"],
     ["1∕x", "²√×", "³√×", "γ√×", "In", "log10","4", "5", "6", "-"],
     ["x!", "sin", "cos", "tan", "e", "EE", "1", "2", "3", "+"],
-    ["􀇳", "sinh", "cosh", "tanh", "π", "Rad", "Rand", "0", ".", "="]]
+    ["TY", "sinh", "cosh", "tanh", "π", "Rad", "Rand", "0", ".", "="]]
 
 let engineeringCalculatorButtonTitles: [[String]] = [
      ["(", ")", "XOR", "D", "E", "F", "⌫"],
@@ -51,7 +51,7 @@ let engineeringCalculatorButtonTitles: [[String]] = [
      ["NOT", "<<", ">>", "7", "8", "9","x"],
      ["NEG", "X<<Y", "X>>Y", "4", "5", "6", "-"],
      ["mod", "RoL", "RoR", "1", "2", "3", "+"],
-     ["􀇳", "flip8", "flip16", "FF", "0", "00", "="]]
+     ["TY", "flip8", "flip16", "FF", "0", "00", "="]]
 
 let convertorCalculatorButtonTitles: [[String]] = [
     ["°C to °F"],
@@ -61,7 +61,7 @@ let convertorCalculatorButtonTitles: [[String]] = [
     ["°F to K"],
     ["K to °F"],
     ["Metric to Imperial"],
-    ["􀇳", "Imperial to Metric"]]
+    ["TY", "Imperial to Metric"]]
 
 
 // U+1F5A9
@@ -104,5 +104,59 @@ func buttonColor(button: String) -> Color {
     case "=", "+", "-", "÷", "x": return Color.orange
     case "AC", "⁺∕₋", "⌫", "%": return Color.gray.opacity(0.5)
     default: return Color.gray.opacity(1.0)
+    }
+}
+
+func buttonTextColor(button: String) -> Color {
+    switch button {
+    default: return Color.white
+    }
+}
+
+func buttonOperationTapped(_ operation: String, displayValue: inout String) -> (Double, String) {
+    var previousValue: String?
+    var newValue: String?
+    var currentOperation: String?
+    var result: Double = 0.0
+    switch operation {
+    case "+", "-", "x", "÷":
+        currentOperation = operation
+        previousValue = displayValue
+        displayValue = ""
+        return (1, previousValue ?? "")
+    case "AC":
+        displayValue = "0"
+        previousValue = displayValue
+        currentOperation = nil
+        return (1, displayValue)
+    case "=":
+       if let currentOperation = currentOperation, let storedValue = previousValue, let currentValue =  Double (displayValue) {
+           
+           switch currentOperation {
+           case "+":
+               result = (Double(storedValue) ?? 0.0) + Double(currentValue)
+           case "-":
+               result = (Double(storedValue) ?? 0.0) - Double(currentValue)
+           case "x":
+               result = (Double(storedValue) ?? 0.0) * Double(currentValue)
+           case "÷":
+               result = (Double(storedValue) ?? 0.0) / Double(currentValue)
+           default: break
+           }
+        }
+        return (1, String(result))
+    case "TY":
+        print("TY")
+        return (1, "1")
+    case "0"..."9", ".":
+        //if displayValue == "0" || displayValue.isEmpty && operation != "." {
+            displayValue = operation
+       // } //else {
+//            displayValue += operation
+//        }
+        return (1, displayValue)
+    default:
+        print("default")
+        return (1, "1")
     }
 }
