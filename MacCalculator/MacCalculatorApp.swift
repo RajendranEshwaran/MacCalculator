@@ -9,9 +9,10 @@ import SwiftUI
 
 @main
 struct MacCalculatorApp: App {
+    @StateObject private var calculatorSettings = CalculatorSettings()
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView().environmentObject(calculatorSettings)
         }
     }
 }

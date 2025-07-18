@@ -8,6 +8,10 @@
 import Foundation
 import SwiftUI
 
+class CalculatorSettings: ObservableObject {
+    @Published var caluclatorMode: CalculatorTypes = .basic
+}
+
 enum CalculatorTypes: String, CaseIterable {
     case basic = "Basic"
     case scientific = "Scientific"

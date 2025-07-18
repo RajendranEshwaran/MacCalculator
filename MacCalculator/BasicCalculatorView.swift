@@ -9,9 +9,10 @@ import SwiftUI
 
 struct BasicCalculatorView: View {
     @State private var displayValue: String = "0"
-    @State private var types: Bool = false
+    @State private var calculatorTypes: Bool = false
     @State private var storedValue: String? = ""
     @State private var storedOperation: String? = nil
+    @StateObject var settings = CalculatorSettings()
     var body: some View {
         ZStack {
             VStack {
@@ -23,7 +24,7 @@ struct BasicCalculatorView: View {
                         Button(action: {
                             let buttons = basicCalculatorButtonTitles[x][y]
                             if buttons == "TY" {
-                                types.toggle()
+                                calculatorTypes.toggle()
                             } else {
                                 let result = buttonOperationTapped(basicCalculatorButtonTitles[x][y], displayValue: &displayValue, storedValue: &storedValue, previousOperation: &storedOperation)
                             
@@ -43,7 +44,35 @@ struct BasicCalculatorView: View {
                 }
                 Spacer()
             }
-        }
+            if calculatorTypes {
+                List(CalculatorTypes.allCases, id: \.self) { types in
+                    VStack {
+                        Text("\(types)")
+                            .onTapGesture {
+                                switch types {
+                                case .basic:
+                                    calculatorTypes = false
+                                    settings.caluclatorMode = .basic
+                                case .scientific:
+                                    calculatorTypes = false
+                                    settings.caluclatorMode = .scientific
+                                case .engineering:
+                                    calculatorTypes = false
+                                    settings.caluclatorMode = .engineering
+                                case .convertor:
+                                    calculatorTypes = false
+                                    settings.caluclatorMode = .convertor
+                                @unknown default:
+                                    fatalError()
+                                }
+                            }
+                    }
+                }.frame(width: 200, height: 200)
+                .scrollDisabled(true)
+                .scrollIndicators(.hidden)
+                .offset(y: 300)
+            }
+        }.environmentObject(settings)
     }
 }
 
