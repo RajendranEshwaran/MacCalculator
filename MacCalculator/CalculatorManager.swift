@@ -113,25 +113,23 @@ func buttonTextColor(button: String) -> Color {
     }
 }
 
-func buttonOperationTapped(_ operation: String, displayValue: inout String) -> (Double, String) {
-    var previousValue: String?
-    var newValue: String?
-    var currentOperation: String?
+// return params -> displayvalue, previousvalue, previousoperation
+func buttonOperationTapped(_ operation: String, displayValue: inout String, storedValue: inout String?, previousOperation: inout String?) -> (String, String?, String?) {
+    var previousValue: String? = storedValue
+    var previousOperation: String? = previousOperation
     var result: Double = 0.0
     switch operation {
     case "+", "-", "x", "÷":
-        currentOperation = operation
+        previousOperation = operation
         previousValue = displayValue
-        displayValue = ""
-        return (1, previousValue ?? "")
+        return (displayValue, previousValue, previousOperation)
     case "AC":
         displayValue = "0"
         previousValue = displayValue
-        currentOperation = nil
-        return (1, displayValue)
+        previousOperation = nil
+        return (displayValue, "", "")
     case "=":
-       if let currentOperation = currentOperation, let storedValue = previousValue, let currentValue =  Double (displayValue) {
-           
+       if let currentOperation = previousOperation, let storedValue = previousValue, let currentValue =  Double (displayValue) {
            switch currentOperation {
            case "+":
                result = (Double(storedValue) ?? 0.0) + Double(currentValue)
@@ -144,19 +142,19 @@ func buttonOperationTapped(_ operation: String, displayValue: inout String) -> (
            default: break
            }
         }
-        return (1, String(result))
+        return (String(result), previousValue, previousOperation)
     case "TY":
-        print("TY")
-        return (1, "1")
+        return ("", "" ,"")
     case "0"..."9", ".":
-        //if displayValue == "0" || displayValue.isEmpty && operation != "." {
+        if displayValue == "0" && operation != "." {
             displayValue = operation
-       // } //else {
-//            displayValue += operation
-//        }
-        return (1, displayValue)
+        } else if previousOperation == nil || previousOperation?.isEmpty ?? true {
+            displayValue += operation
+        } else {
+            displayValue = operation
+        }
+        return (displayValue, previousValue, previousOperation)
     default:
-        print("default")
-        return (1, "1")
+        return (displayValue, previousValue, previousOperation)
     }
 }

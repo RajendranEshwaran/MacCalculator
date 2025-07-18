@@ -10,6 +10,8 @@ import SwiftUI
 struct BasicCalculatorView: View {
     @State private var displayValue: String = "0"
     @State private var types: Bool = false
+    @State private var storedValue: String? = ""
+    @State private var storedOperation: String? = nil
     var body: some View {
         ZStack {
             VStack {
@@ -23,8 +25,11 @@ struct BasicCalculatorView: View {
                             if buttons == "TY" {
                                 types.toggle()
                             } else {
-                                let result = buttonOperationTapped(basicCalculatorButtonTitles[x][y], displayValue: &displayValue)
-                                displayValue = String(result.1)
+                                let result = buttonOperationTapped(basicCalculatorButtonTitles[x][y], displayValue: &displayValue, storedValue: &storedValue, previousOperation: &storedOperation)
+                            
+                                displayValue = String(result.0)
+                                storedValue = String(result.1 ?? "")
+                                storedOperation = String(result.2 ?? "")
                             }
                         }) {
                             let buttons = basicCalculatorButtonTitles[x][y]
